@@ -1,0 +1,89 @@
+/* 
+Problem Defination.
+Given an array of integers A and a sum B, find all unique combinations in A where the sum is equal to B. 
+The same repeated number may be chosen from A unlimited number of times.
+INPUT - First line of input contains number of testcases T. For each testcase, there will be three lines of input, 
+first of which contains N, size of array. Next line contains N space seperated integers, and the last line contains B.
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+void findsum(vector<int> &arr, vector<int> &res, int sum, int b, int index, int &flag)
+{
+    if(sum >b) {
+        return;
+    }
+    if(sum == b) {
+        flag = 1;
+        cout << "(";
+        for(int i = 0; i < res.size(); i++) {
+            if(i == res.size()-1) {
+                cout << res[i];
+            } else {
+                cout << res[i] << " "; 
+            }
+        }
+        cout << ")";
+    }
+    
+    for(int i = index; i < arr.size(); i++) {
+        res.push_back(arr[i]);
+        
+        findsum(arr, res, sum+arr[i], b, i, flag);
+        
+        res.pop_back();
+    }
+    
+}
+
+int main() {
+	//code
+	int t;
+	cin >> t;
+	while(t--) {
+	    int n, k, b;
+	    cin >> n;
+	    vector<int> arr;
+	    set<int> s;
+	    for(int i = 0; i < n; i++) {
+	        cin >> b;
+	        s.insert(b);
+	    }
+	    for(auto it = s.begin(); it != s.end(); it++) {
+	        arr.push_back(*it);
+	    }
+	    cin >> b;
+	    sort(arr.begin(), arr.end());
+	    int sum = 0;
+	    int index = 0;
+	    vector<int> res;
+	    int flag = 0;
+	    findsum(arr, res, sum, b, index, flag);
+	    if(flag == 0) {
+	        cout << "Empty";
+	    }
+	    cout << endl;
+	}
+	return 0;
+}
+
+
+/*
+
+INPUT:
+3
+5
+8 1 8 6 8 
+12
+4
+7 2 6 5 
+16
+4
+5 2 2 6
+3
+
+OUTPUT:
+(1 1 1 1 1 1 1 1 1 1 1 1)(1 1 1 1 1 1 6)(1 1 1 1 8)(6 6)
+(2 2 2 2 2 2 2 2)(2 2 2 2 2 6)(2 2 2 5 5)(2 2 5 7)(2 2 6 6)(2 7 7)(5 5 6)
+Empty
